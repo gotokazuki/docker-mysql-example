@@ -1,10 +1,8 @@
-version: "3.9"
 services:
   mysql:
     container_name: mysql
-    image: mysql:8.0 #https://hub.docker.com/_/mysql
-    platform: linux/x86_64
-    restart: always
+    image: mysql:9
+    restart: unless-stopped
     environment:
       - MYSQL_ROOT_PASSWORD=pass
       - MYSQL_USER=docker
@@ -14,7 +12,7 @@ services:
       - 3306:3306
     volumes:
       - ./mysql/initdb:/docker-entrypoint-initdb.d
-      - ./data:/var/lib/mysql
+      - ./.volume/mysql:/var/lib/mysql
       - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "docker", "-pdocker"]
